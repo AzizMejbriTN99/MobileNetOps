@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/etName"
+        android:hint="Resource name (e.g. Cat6 Cable)"
+        android:inputType="text"
+        android:background="@drawable/input_bg"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etQuantity"
+            android:hint="Qty"
+            android:inputType="number"
+            android:background="@drawable/input_bg"
+            android:padding="12dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etUnit"
+            android:hint="Unit (e.g. m, pcs)"
+            android:inputType="text"
+            android:background="@drawable/input_bg"
+            android:padding="12dp"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etNote"
+        android:hint="Notes (optional)"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:background="@drawable/input_bg"
+        android:padding="12dp"
+        android:gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

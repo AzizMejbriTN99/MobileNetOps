@@ -15,6 +15,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
+        android:name=".NetOpsApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,32 +26,36 @@
         android:theme="@style/Theme.NetOps"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Launcher: start at Login, redirect to Main if already logged in -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.DemandeDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.MapActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ResourcesActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBS1RnxakpD9SbGCLBcz4MtRTT9yLoUBKQ" />
-
-        <activity android:name=".ui.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.DemandeDetailActivity"
-            android:exported="false" />
-
-        <activity android:name=".ui.MapActivity"
-            android:exported="false" />
 
         <service
             android:name=".service.LocationForegroundService"
