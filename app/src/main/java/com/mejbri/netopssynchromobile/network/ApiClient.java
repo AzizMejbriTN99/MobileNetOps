@@ -9,8 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://10.0.2.2:5600/"; // emulator
-    // For real device: use your PC's local IP e.g. "http://192.168.1.x:5600/"
+    private static final String BASE_URL = "http://localhost:5600/";
 
     private static Retrofit retrofit;
     private static Context appContext;
