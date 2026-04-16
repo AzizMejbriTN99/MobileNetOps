@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center"
+    android:background="#EEF3F9">
+
+    <TextView
+        android:text="NetOps Synchro"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#0B1A30"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="Technician Portal"
+        android:textSize="14sp"
+        android:textColor="#7A96B0"
+        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvError"
+        android:visibility="gone"
+        android:textColor="#B91C1C"
+        android:background="#FFF1F1"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:hint="Username"
+        android:inputType="text"
+        android:background="@drawable/input_bg"
+        android:padding="14dp"
+        android:layout_marginBottom="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:background="@drawable/input_bg"
+        android:padding="14dp"
+        android:layout_marginBottom="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:text="Sign In"
+        android:background="@drawable/btn_primary"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
