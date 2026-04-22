@@ -7,7 +7,7 @@
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="1dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +15,13 @@
         android:orientation="horizontal"
         android:padding="14dp"
         android:gravity="center_vertical">
+
+        <!-- Left: blue accent bar -->
+        <View
+            android:layout_width="4dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_primary"
+            android:layout_marginEnd="12dp"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -26,21 +33,22 @@
                 android:id="@+id/tvName"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#0B1A30"
+                android:textColor="@color/text_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/tvQty"
                 android:textSize="12sp"
-                android:textColor="#005FA3"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/tvNote"
                 android:textSize="11sp"
-                android:textColor="#7A96B0"
+                android:textColor="@color/text_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -48,6 +56,7 @@
         <ImageButton
             android:id="@+id/btnDelete"
             android:src="@android:drawable/ic_menu_delete"
+            android:tint="@color/text_hint"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_width="36dp"
             android:layout_height="36dp"/>

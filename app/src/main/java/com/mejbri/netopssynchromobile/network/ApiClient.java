@@ -1,6 +1,8 @@
 package com.mejbri.netopssynchromobile.network;
 
+import android.content.Intent;
 import android.content.Context;
+import com.mejbri.netopssynchromobile.ui.LoginActivity;
 import com.mejbri.netopssynchromobile.util.SessionManager;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -10,7 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     private static final String BASE_URL = "http://localhost:5600/";
-
     private static Retrofit retrofit;
     private static Context appContext;
 
@@ -30,6 +31,17 @@ public class ApiClient {
                             .build()
                             : original;
                     return chain.proceed(request);
+                })
+                .addInterceptor(chain -> {
+                    Response response = chain.proceed(chain.request());
+                    if (response.code() == 401) {
+                        SessionManager.clear(appContext);
+                        Intent intent = new Intent(appContext, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        appContext.startActivity(intent);
+                    }
+                    return response;
                 })
                 .addInterceptor(logging)
                 .build();

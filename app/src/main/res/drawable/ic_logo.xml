@@ -1,0 +1,134 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="160"
+    android:viewportHeight="160">
+
+    <!-- Outer ring - cyan stroke -->
+    <path
+        android:pathData="M 80,28 A 52,52 0 1 1 79.9,28"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.8"/>
+
+    <!-- Arc highlight top - bright cyan -->
+    <path
+        android:pathData="M 80,28 A 52,52 0 0 1 124.6,106"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="4"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"/>
+
+    <!-- Arc highlight bottom - teal -->
+    <path
+        android:pathData="M 80,132 A 52,52 0 0 1 35.4,54"
+        android:strokeColor="#00FFB3"
+        android:strokeWidth="2.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.8"/>
+
+    <!-- Spoke lines from center -->
+    <path
+        android:pathData="M 80,80 L 80,28"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+    <path
+        android:pathData="M 80,80 L 125,54"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+    <path
+        android:pathData="M 80,80 L 125,106"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+    <path
+        android:pathData="M 80,80 L 80,132"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+    <path
+        android:pathData="M 80,80 L 35,106"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+    <path
+        android:pathData="M 80,80 L 35,54"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="0.9"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.4"/>
+
+    <!-- Node dots - top & bottom (primary cyan) -->
+    <path
+        android:pathData="M 80,28 m -5,0 a 5,5 0 1 0 10,0 a 5,5 0 1 0 -10,0"
+        android:fillColor="#00E5FF"/>
+    <path
+        android:pathData="M 125,106 m -5,0 a 5,5 0 1 0 10,0 a 5,5 0 1 0 -10,0"
+        android:fillColor="#00E5FF"/>
+    <path
+        android:pathData="M 35,106 m -5,0 a 5,5 0 1 0 10,0 a 5,5 0 1 0 -10,0"
+        android:fillColor="#00E5FF"/>
+
+    <!-- Node dots - secondary teal -->
+    <path
+        android:pathData="M 125,54 m -4,0 a 4,4 0 1 0 8,0 a 4,4 0 1 0 -8,0"
+        android:fillColor="#00FFB3"/>
+    <path
+        android:pathData="M 80,132 m -4,0 a 4,4 0 1 0 8,0 a 4,4 0 1 0 -8,0"
+        android:fillColor="#00FFB3"/>
+    <path
+        android:pathData="M 35,54 m -4,0 a 4,4 0 1 0 8,0 a 4,4 0 1 0 -8,0"
+        android:fillColor="#00FFB3"/>
+
+    <!-- Central dark filled circle -->
+    <path
+        android:pathData="M 80,80 m -22,0 a 22,22 0 1 0 44,0 a 22,22 0 1 0 -44,0"
+        android:fillColor="#060E1C"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="1.6"/>
+
+    <!-- Globe crosshair lines -->
+    <path
+        android:pathData="M 66,80 L 94,80"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.8"/>
+    <path
+        android:pathData="M 80,66 L 80,94"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.8"/>
+
+    <!-- Globe circle ring -->
+    <path
+        android:pathData="M 80,80 m -14,0 a 14,14 0 1 0 28,0 a 14,14 0 1 0 -28,0"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"/>
+
+    <!-- Globe meridian curves (teal) -->
+    <path
+        android:pathData="M 80,66 Q 71,80 80,94"
+        android:strokeColor="#00FFB3"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.85"/>
+    <path
+        android:pathData="M 80,66 Q 89,80 80,94"
+        android:strokeColor="#00FFB3"
+        android:strokeWidth="1.2"
+        android:fillColor="#00000000"
+        android:strokeAlpha="0.85"/>
+
+</vector>

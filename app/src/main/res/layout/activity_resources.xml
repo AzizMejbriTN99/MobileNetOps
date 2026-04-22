@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#EEF3F9">
+    android:background="@color/background">
 
-    <!-- Topbar -->
+    <!-- ── Dark navy topbar ── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -13,25 +14,32 @@
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
+        android:background="@drawable/topbar_bg"
+        android:elevation="4dp">
 
         <ImageButton
             android:id="@+id/btnBack"
             android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/icon_on_dark"
             android:padding="8dp"
             android:contentDescription="Back"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
 
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_logo"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="Logo"/>
+
         <TextView
             android:text="My Resources"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#0B1A30"
+            android:textColor="@color/text_on_dark"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
@@ -40,27 +48,28 @@
             android:text="+ Add"
             android:background="@drawable/btn_primary"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_width="72dp"
             android:layout_height="36dp"/>
     </LinearLayout>
 
     <TextView
-        android:text="Equipment &amp; Materials"
-        android:textSize="13sp"
-        android:textColor="#4A6A88"
-        android:textAllCaps="true"
-        android:letterSpacing="0.08"
+        android:text="EQUIPMENT &amp; MATERIALS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.14"
         android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvResources"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:paddingTop="4dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"

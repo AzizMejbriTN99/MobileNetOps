@@ -5,13 +5,24 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <TextView
+        android:text="RESOURCE NAME"
+        android:textSize="9sp" android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.14"
+        android:layout_marginBottom="6dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/etName"
-        android:hint="Resource name (e.g. Cat6 Cable)"
+        android:hint="e.g. Cat6 Cable"
         android:inputType="text"
         android:background="@drawable/input_bg"
         android:padding="12dp"
-        android:layout_marginBottom="12dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
+        android:layout_marginBottom="14dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -19,38 +30,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="14dp">
 
-        <EditText
-            android:id="@+id/etQuantity"
-            android:hint="Qty"
-            android:inputType="number"
-            android:background="@drawable/input_bg"
-            android:padding="12dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+            <TextView android:text="QUANTITY"
+                android:textSize="9sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary" android:letterSpacing="0.14"
+                android:layout_marginBottom="6dp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <EditText android:id="@+id/etQuantity"
+                android:hint="0" android:inputType="number"
+                android:background="@drawable/input_bg" android:padding="12dp"
+                android:textSize="14sp" android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/etUnit"
-            android:hint="Unit (e.g. m, pcs)"
-            android:inputType="text"
-            android:background="@drawable/input_bg"
-            android:padding="12dp"
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="2" android:orientation="vertical">
+            <TextView android:text="UNIT"
+                android:textSize="9sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary" android:letterSpacing="0.14"
+                android:layout_marginBottom="6dp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <EditText android:id="@+id/etUnit"
+                android:hint="e.g. m, pcs, kg" android:inputType="text"
+                android:background="@drawable/input_bg" android:padding="12dp"
+                android:textSize="14sp" android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:text="NOTES (OPTIONAL)"
+        android:textSize="9sp" android:textStyle="bold"
+        android:textColor="@color/text_secondary" android:letterSpacing="0.14"
+        android:layout_marginBottom="6dp"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/etNote"
-        android:hint="Notes (optional)"
+        android:hint="Additional details..."
         android:inputType="textMultiLine"
         android:minLines="2"
         android:background="@drawable/input_bg"
         android:padding="12dp"
         android:gravity="top"
+        android:textSize="14sp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

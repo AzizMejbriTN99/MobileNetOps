@@ -1,75 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#EEF3F9">
+    android:background="@color/background">
 
-    <!-- Topbar -->
+    <!-- ── Dark navy topbar ── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="16dp"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/topbar_bg"
+        android:elevation="4dp">
 
+        <!-- Logo icon -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_logo"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="Logo"/>
+
+        <!-- Welcome text -->
         <TextView
             android:id="@+id/tvWelcome"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#0B1A30"
+            android:textColor="@color/text_on_dark"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
+        <!-- Resources button -->
         <ImageButton
             android:id="@+id/btnResources"
             android:src="@drawable/ic_resources"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/icon_on_dark"
             android:padding="8dp"
             android:contentDescription="Resources"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
 
+        <!-- Map button -->
         <ImageButton
             android:id="@+id/btnMap"
             android:src="@drawable/ic_map"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/icon_on_dark"
             android:padding="8dp"
             android:contentDescription="Map"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
 
+        <!-- Logout button -->
         <ImageButton
             android:id="@+id/btnLogout"
             android:src="@drawable/ic_logout"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/icon_on_dark"
             android:padding="8dp"
             android:contentDescription="Logout"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
     </LinearLayout>
 
+    <!-- Section label -->
     <TextView
-        android:text="My Tasks"
-        android:textSize="13sp"
-        android:textColor="#4A6A88"
-        android:textAllCaps="true"
-        android:letterSpacing="0.08"
+        android:text="MY TASKS"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.14"
         android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- Empty state -->
     <TextView
         android:id="@+id/tvEmpty"
         android:text="No tasks assigned"
         android:visibility="gone"
-        android:textColor="#B0C4D8"
+        android:textColor="@color/text_hint"
         android:textSize="14sp"
         android:gravity="center"
         android:padding="48dp"
@@ -83,8 +101,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvDemandes"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
             android:paddingTop="4dp"
             android:paddingBottom="16dp"
             android:clipToPadding="false"

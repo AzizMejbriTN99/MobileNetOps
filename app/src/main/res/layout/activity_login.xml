@@ -1,74 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center"
-    android:background="#EEF3F9">
+    android:background="@color/background">
 
-    <TextView
-        android:text="NetOps Synchro"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="#0B1A30"
-        android:layout_marginBottom="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:text="Technician Portal"
-        android:textSize="14sp"
-        android:textColor="#7A96B0"
-        android:layout_marginBottom="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tvError"
-        android:visibility="gone"
-        android:textColor="#B91C1C"
-        android:background="#FFF1F1"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
+    <!-- ── Brand panel (dark navy, like desktop left panel) ── -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1.6"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/login_brand_bg"
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp">
 
-    <EditText
-        android:id="@+id/etUsername"
-        android:hint="Username"
-        android:inputType="text"
-        android:background="@drawable/input_bg"
-        android:padding="14dp"
-        android:layout_marginBottom="12dp"
+        <!-- Logo icon -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_logo"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="NetOps Logo"/>
+
+        <!-- Brand name -->
+        <TextView
+            android:text="NetOps"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="#E8F4FF"
+            android:letterSpacing="0.05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="SYNCHRO"
+            android:textSize="13sp"
+            android:textColor="#00AED4"
+            android:letterSpacing="0.3"
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Thin divider line -->
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp"
+            android:background="#1E3A5A"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:text="NETWORK INFRASTRUCTURE CONTROL SYSTEM"
+            android:textSize="9sp"
+            android:textColor="#3A6080"
+            android:letterSpacing="0.12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- ── Form panel (light, like desktop right panel) ── -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="2.4"
+        android:orientation="vertical"
+        android:background="@color/surface"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        android:gravity="center_vertical">
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:background="@drawable/input_bg"
-        android:padding="14dp"
-        android:layout_marginBottom="24dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:text="Sign In"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:text="Sign In"
-        android:background="@drawable/btn_primary"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"/>
+        <TextView
+            android:text="Technician Portal"
+            android:textSize="13sp"
+            android:textColor="@color/text_hint"
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:visibility="gone"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        <!-- Error banner -->
+        <TextView
+            android:id="@+id/tvError"
+            android:visibility="gone"
+            android:textColor="#B91C1C"
+            android:textSize="13sp"
+            android:background="#FFF1F1"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Username label + field -->
+        <TextView
+            android:text="USERNAME"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_secondary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:hint="Enter your username"
+            android:inputType="text"
+            android:background="@drawable/input_bg"
+            android:padding="14dp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Password label + field -->
+        <TextView
+            android:text="PASSWORD"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_secondary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
+            android:background="@drawable/input_bg"
+            android:padding="14dp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Sign In button -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:text="SIGN IN"
+            android:background="@drawable/btn_primary"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:letterSpacing="0.1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 
 </LinearLayout>
