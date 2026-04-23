@@ -3,15 +3,17 @@ package com.mejbri.netopssynchromobile;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.*;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.work.*;
 import com.mejbri.netopssynchromobile.model.Demande;
 import com.mejbri.netopssynchromobile.network.*;
@@ -19,7 +21,6 @@ import com.mejbri.netopssynchromobile.service.*;
 import com.mejbri.netopssynchromobile.ui.DemandeDetailActivity;
 import com.mejbri.netopssynchromobile.ui.DemandesAdapter;
 import com.mejbri.netopssynchromobile.ui.LoginActivity;
-import com.mejbri.netopssynchromobile.ui.MapActivity;
 import com.mejbri.netopssynchromobile.ui.ResourcesActivity;
 import com.mejbri.netopssynchromobile.util.SessionManager;
 import retrofit2.Call;
@@ -31,39 +32,68 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERM_LOCATION = 100;
-    private RecyclerView     rvDemandes;
-    private SwipeRefreshLayout swipeRefresh;
-    private TextView         tvEmpty, tvWelcome;
-    private DemandesAdapter  adapter;
+
+    // Active task views
+    private View cardActiveTask;
+    private View layoutNoActive;
+    private TextView tvWelcome, tvActiveTitle, tvActivePriority, tvActiveStatus,
+                     tvActiveClient, tvActiveLocation;
+    private Button btnOpenActive;
+
+    // History views
+    private RecyclerView rvHistory;
+    private TextView tvHistoryEmpty, tabResolved, tabClosed;
+    private EditText etSearch;
+    private DemandesAdapter historyAdapter;
+
+    // Data
+    private Demande activeTask;
+    private List<Demande> allHistory = new ArrayList<>(); // RESOLVED + CLOSED
+    private String activeTab = "RESOLVED"; // RESOLVED | CLOSED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvWelcome    = findViewById(R.id.tvWelcome);
-        rvDemandes   = findViewById(R.id.rvDemandes);
-        swipeRefresh = findViewById(R.id.swipeRefresh);
-        tvEmpty      = findViewById(R.id.tvEmpty);
+        tvWelcome       = findViewById(R.id.tvWelcome);
+        cardActiveTask  = findViewById(R.id.cardActiveTask);
+        layoutNoActive  = findViewById(R.id.layoutNoActive);
+        tvActiveTitle   = findViewById(R.id.tvActiveTitle);
+        tvActivePriority= findViewById(R.id.tvActivePriority);
+        tvActiveStatus  = findViewById(R.id.tvActiveStatus);
+        tvActiveClient  = findViewById(R.id.tvActiveClient);
+        tvActiveLocation= findViewById(R.id.tvActiveLocation);
+        btnOpenActive   = findViewById(R.id.btnOpenActive);
+        rvHistory       = findViewById(R.id.rvHistory);
+        tvHistoryEmpty  = findViewById(R.id.tvHistoryEmpty);
+        tabResolved     = findViewById(R.id.tabResolved);
+        tabClosed       = findViewById(R.id.tabClosed);
+        etSearch        = findViewById(R.id.etSearch);
 
         tvWelcome.setText("Welcome, " + SessionManager.getUsername(this));
 
-        adapter = new DemandesAdapter(demande -> {
-            Intent intent = new Intent(this, DemandeDetailActivity.class);
-            intent.putExtra("demandeId", demande.id);
-            startActivity(intent);
+        historyAdapter = new DemandesAdapter(demande -> openDetail(demande.id));
+        rvHistory.setLayoutManager(new LinearLayoutManager(this));
+        rvHistory.setAdapter(historyAdapter);
+
+        btnOpenActive.setOnClickListener(v -> {
+            if (activeTask != null) openDetail(activeTask.id);
         });
 
-        rvDemandes.setLayoutManager(new LinearLayoutManager(this));
-        rvDemandes.setAdapter(adapter);
+        tabResolved.setOnClickListener(v -> setTab("RESOLVED"));
+        tabClosed.setOnClickListener(v   -> setTab("CLOSED"));
 
-        swipeRefresh.setOnRefreshListener(this::loadDemandes);
-        swipeRefresh.setColorSchemeResources(R.color.primary);
+        // Search bar — filter history list as the user types
+        etSearch.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                applyHistoryFilter();
+            }
+            public void afterTextChanged(Editable s) {}
+        });
 
-        // toolbar logout + map buttons
         findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
-        findViewById(R.id.btnMap).setOnClickListener(v ->
-                startActivity(new Intent(this, MapActivity.class)));
         findViewById(R.id.btnResources).setOnClickListener(v ->
                 startActivity(new Intent(this, ResourcesActivity.class)));
 
@@ -78,28 +108,109 @@ public class MainActivity extends AppCompatActivity {
         loadDemandes();
     }
 
+    // ── Data ──────────────────────────────────────────────────────────────────
+
     private void loadDemandes() {
-        swipeRefresh.setRefreshing(true);
         ApiClient.create(TechnicianApi.class).getMyDemandes()
                 .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<List<Demande>> call, Response<List<Demande>> r) {
+                        if (!r.isSuccessful() || r.body() == null) return;
                         runOnUiThread(() -> {
-                            swipeRefresh.setRefreshing(false);
-                            if (r.isSuccessful() && r.body() != null) {
-                                List<Demande> list = r.body();
-                                adapter.setData(list);
-                                tvEmpty.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+                            activeTask = null;
+                            allHistory.clear();
+                            for (Demande d : r.body()) {
+                                if ("NEW".equals(d.status) || "IN_PROGRESS".equals(d.status)) {
+                                    // Take the most recent active task if somehow there's more than one
+                                    if (activeTask == null) activeTask = d;
+                                } else if ("RESOLVED".equals(d.status) || "CLOSED".equals(d.status)) {
+                                    allHistory.add(d);
+                                }
                             }
+                            populateActiveTask();
+                            applyHistoryFilter();
                         });
                     }
-
                     @Override
-                    public void onFailure(Call<List<Demande>> call, Throwable t) {
-                        runOnUiThread(() -> swipeRefresh.setRefreshing(false));
-                    }
+                    public void onFailure(Call<List<Demande>> call, Throwable t) {}
                 });
     }
+
+    // ── Active task card ──────────────────────────────────────────────────────
+
+    private void populateActiveTask() {
+        if (activeTask != null) {
+            cardActiveTask.setVisibility(View.VISIBLE);
+            layoutNoActive.setVisibility(View.GONE);
+            tvActiveTitle.setText(activeTask.title);
+            tvActiveClient.setText(activeTask.clientName);
+            tvActiveLocation.setText(
+                    activeTask.clientLocation != null ? activeTask.clientLocation : "—");
+            tvActiveStatus.setText(activeTask.status.replace("_", " "));
+
+            // Priority color
+            String p = activeTask.priority != null ? activeTask.priority : "";
+            int pc = p.equals("CRITICAL") ? Color.parseColor("#C0392B")
+                   : p.equals("HIGH")     ? Color.parseColor("#B45309")
+                   : p.equals("MEDIUM")   ? Color.parseColor("#005FA3")
+                   :                        Color.parseColor("#16A34A");
+            tvActivePriority.setText(p);
+            tvActivePriority.setTextColor(pc);
+
+            // Status color
+            tvActiveStatus.setTextColor("IN_PROGRESS".equals(activeTask.status)
+                    ? Color.parseColor("#B45309")
+                    : Color.parseColor("#005FA3"));
+        } else {
+            cardActiveTask.setVisibility(View.GONE);
+            layoutNoActive.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // ── History ───────────────────────────────────────────────────────────────
+
+    private void setTab(String tab) {
+        activeTab = tab;
+        // Update tab chip visuals
+        if ("RESOLVED".equals(tab)) {
+            tabResolved.setBackgroundResource(R.drawable.btn_primary);
+            tabResolved.setTextColor(Color.WHITE);
+            tabClosed.setBackgroundResource(R.drawable.filter_chip_inactive);
+            tabClosed.setTextColor(getColor(R.color.primary));
+        } else {
+            tabClosed.setBackgroundResource(R.drawable.btn_primary);
+            tabClosed.setTextColor(Color.WHITE);
+            tabResolved.setBackgroundResource(R.drawable.filter_chip_inactive);
+            tabResolved.setTextColor(getColor(R.color.primary));
+        }
+        etSearch.setText(""); // clear search when switching tabs
+        applyHistoryFilter();
+    }
+
+    private void applyHistoryFilter() {
+        String query = etSearch.getText().toString().trim().toLowerCase();
+        List<Demande> filtered = new ArrayList<>();
+        for (Demande d : allHistory) {
+            if (!activeTab.equals(d.status)) continue;
+            if (!query.isEmpty()) {
+                boolean matches = (d.title != null && d.title.toLowerCase().contains(query))
+                        || (d.clientName != null && d.clientName.toLowerCase().contains(query))
+                        || (d.clientLocation != null && d.clientLocation.toLowerCase().contains(query));
+                if (!matches) continue;
+            }
+            filtered.add(d);
+        }
+        historyAdapter.setData(filtered);
+        tvHistoryEmpty.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void openDetail(long id) {
+        Intent intent = new Intent(this, DemandeDetailActivity.class);
+        intent.putExtra("demandeId", id);
+        startActivity(intent);
+    }
+
+    // ── Location ──────────────────────────────────────────────────────────────
 
     private void requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -124,8 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startLocationService() {
-        Intent intent = new Intent(this, LocationForegroundService.class);
-        startForegroundService(intent);
+        startForegroundService(new Intent(this, LocationForegroundService.class));
     }
 
     private void scheduleBackgroundLocation() {
@@ -138,6 +248,8 @@ public class MainActivity extends AppCompatActivity {
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "location_bg", ExistingPeriodicWorkPolicy.KEEP, work);
     }
+
+    // ── Logout ────────────────────────────────────────────────────────────────
 
     private void logout() {
         stopService(new Intent(this, LocationForegroundService.class));

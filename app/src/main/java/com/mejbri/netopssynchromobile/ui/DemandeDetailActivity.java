@@ -1,6 +1,8 @@
 package com.mejbri.netopssynchromobile.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.*;
 import android.provider.MediaStore;
@@ -8,8 +10,11 @@ import android.view.View;
 import android.widget.*;
 import androidx.activity.result.*;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.*;
 import com.mejbri.netopssynchromobile.R;
@@ -26,12 +31,13 @@ import java.util.*;
 
 public class DemandeDetailActivity extends AppCompatActivity {
 
+    private static final int PERM_CAMERA = 201;
+
     private long demandeId;
     private Demande demande;
     private Uri photoUri;
 
-    private TextView tvTitle, tvClient, tvLocation, tvContact, tvStatus,
-            tvPriority, tvDescription;
+    private TextView tvTitle, tvClient, tvLocation, tvContact, tvStatus, tvPriority, tvDescription;
     private Button   btnStatus, btnAction, btnPhoto, btnNavigate;
     private RecyclerView rvTimeline;
     private TimelineAdapter timelineAdapter;
@@ -76,10 +82,39 @@ public class DemandeDetailActivity extends AppCompatActivity {
 
         btnStatus.setOnClickListener(v -> showStatusDialog());
         btnAction.setOnClickListener(v -> showActionDialog());
-        btnPhoto.setOnClickListener(v -> takePhoto());
+        btnPhoto.setOnClickListener(v -> requestCameraAndTakePhoto());
         btnNavigate.setOnClickListener(v -> openNavigation());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
+
+    // ── Camera permission ────────────────────────────────────────────────────
+
+    private void requestCameraAndTakePhoto() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            takePhoto();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{ Manifest.permission.CAMERA }, PERM_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERM_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePhoto();
+            } else {
+                Toast.makeText(this, "Camera permission is required to take photos",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // ── Data loading ─────────────────────────────────────────────────────────
 
     private void loadDemande() {
         ApiClient.create(TechnicianApi.class).getDemande(demandeId)
@@ -105,6 +140,20 @@ public class DemandeDetailActivity extends AppCompatActivity {
         tvDescription.setText(demande.description != null ? demande.description : "");
         btnNavigate.setVisibility(
                 demande.latitude != null && demande.longitude != null ? View.VISIBLE : View.GONE);
+
+        // Lock all action buttons for closed tasks
+        boolean isClosed = "CLOSED".equals(demande.status);
+        btnStatus.setEnabled(!isClosed);
+        btnAction.setEnabled(!isClosed);
+        btnPhoto.setEnabled(!isClosed);
+        btnStatus.setAlpha(isClosed ? 0.4f : 1f);
+        btnAction.setAlpha(isClosed ? 0.4f : 1f);
+        btnPhoto.setAlpha(isClosed ? 0.4f : 1f);
+        if (isClosed) {
+            btnStatus.setText("Task Closed");
+            btnAction.setVisibility(View.GONE);
+            btnPhoto.setVisibility(View.GONE);
+        }
     }
 
     private void loadTimeline() {
@@ -119,6 +168,8 @@ public class DemandeDetailActivity extends AppCompatActivity {
                     @Override public void onFailure(Call<List<DemandeAction>> call, Throwable t) {}
                 });
     }
+
+    // ── Dialogs ───────────────────────────────────────────────────────────────
 
     private void showStatusDialog() {
         String[] statuses = {"IN_PROGRESS", "RESOLVED", "CLOSED"};
@@ -161,13 +212,13 @@ public class DemandeDetailActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Log Action")
                 .setItems(labels, (d, which) -> {
-                    // optionally ask for note
                     EditText et = new EditText(this);
                     et.setHint("Add a note (optional)");
                     new AlertDialog.Builder(this)
                             .setTitle(labels[which])
                             .setView(et)
-                            .setPositiveButton("Log", (dd, ww) -> logAction(actions[which], et.getText().toString()))
+                            .setPositiveButton("Log", (dd, ww) ->
+                                    logAction(actions[which], et.getText().toString()))
                             .setNegativeButton("Cancel", null)
                             .show();
                 })
@@ -192,9 +243,12 @@ public class DemandeDetailActivity extends AppCompatActivity {
                 });
     }
 
+    // ── Photo ─────────────────────────────────────────────────────────────────
+
     private void takePhoto() {
         File photoFile = new File(getCacheDir() + "/photos",
                 "photo_" + System.currentTimeMillis() + ".jpg");
+        //noinspection ResultOfMethodCallIgnored
         photoFile.getParentFile().mkdirs();
         photoUri = FileProvider.getUriForFile(this,
                 getPackageName() + ".fileprovider", photoFile);
@@ -205,10 +259,8 @@ public class DemandeDetailActivity extends AppCompatActivity {
 
     private void uploadPhoto(Uri uri) {
         try {
-            byte[] bytes = getContentResolver()
-                    .openInputStream(uri).readAllBytes();
-            RequestBody reqBody = RequestBody.create(bytes,
-                    MediaType.parse("image/jpeg"));
+            byte[] bytes = getContentResolver().openInputStream(uri).readAllBytes();
+            RequestBody reqBody = RequestBody.create(bytes, MediaType.parse("image/jpeg"));
             MultipartBody.Part part = MultipartBody.Part
                     .createFormData("photo", "photo.jpg", reqBody);
 
@@ -223,9 +275,11 @@ public class DemandeDetailActivity extends AppCompatActivity {
                                     r.isSuccessful() ? "Photo uploaded" : "Upload failed",
                                     Toast.LENGTH_SHORT).show());
                         }
-                        @Override public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Map<String, Object>> call, Throwable t) {
                             runOnUiThread(() -> Toast.makeText(
-                                    DemandeDetailActivity.this, "Upload failed", Toast.LENGTH_SHORT).show());
+                                    DemandeDetailActivity.this, "Upload failed",
+                                    Toast.LENGTH_SHORT).show());
                         }
                     });
         } catch (Exception e) {
@@ -233,9 +287,10 @@ public class DemandeDetailActivity extends AppCompatActivity {
         }
     }
 
+    // ── Navigation ────────────────────────────────────────────────────────────
+
     private void openNavigation() {
         if (demande == null || demande.latitude == null) return;
-        // send coordinates to Google Maps app — no API cost
         Uri gmmIntentUri = Uri.parse(
                 "google.navigation:q=" + demande.latitude + "," + demande.longitude + "&mode=d");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -243,7 +298,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
         if (mapIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(mapIntent);
         } else {
-            // fallback — open in browser maps
             Uri browserUri = Uri.parse(
                     "https://www.google.com/maps/dir/?api=1&destination="
                             + demande.latitude + "," + demande.longitude);
