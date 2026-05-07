@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mejbri.netopssynchromobile.MainActivity;
 import com.mejbri.netopssynchromobile.R;
 import com.mejbri.netopssynchromobile.model.*;
 import com.mejbri.netopssynchromobile.network.*;
+import com.mejbri.netopssynchromobile.service.FCMNotificationService;
 import com.mejbri.netopssynchromobile.util.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,18 +18,17 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etUsername, etPassword;
-    private Button   btnLogin;
+    private EditText    etUsername, etPassword;
+    private Button      btnLogin;
     private ProgressBar progress;
-    private TextView tvError;
+    private TextView    tvError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (SessionManager.isLoggedIn(this)) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            go();
             return;
         }
 
@@ -46,8 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         String user = etUsername.getText().toString().trim();
         String pass = etPassword.getText().toString().trim();
         if (user.isEmpty() || pass.isEmpty()) {
-            tvError.setText("Please fill in all fields.");
-            tvError.setVisibility(View.VISIBLE);
+            showError("Please fill in all fields.");
             return;
         }
         btnLogin.setEnabled(false);
@@ -65,17 +64,15 @@ public class LoginActivity extends AppCompatActivity {
                             if (r.isSuccessful() && r.body() != null) {
                                 LoginResponse body = r.body();
                                 if (!"ROLE_TECHNICIAN".equals(body.role)) {
-                                    tvError.setText("Access denied. Technician accounts only.");
-                                    tvError.setVisibility(View.VISIBLE);
+                                    showError("Access denied. Technician accounts only.");
                                     return;
                                 }
                                 SessionManager.save(LoginActivity.this,
-                                        body.token, body.username, body.role);
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
+                                        body.token, body.username, body.role,
+                                        body.firstname, body.lastname);
+                                registerFcmThenGo();
                             } else {
-                                tvError.setText("Invalid credentials.");
-                                tvError.setVisibility(View.VISIBLE);
+                                showError("Invalid credentials.");
                             }
                         });
                     }
@@ -85,10 +82,33 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             progress.setVisibility(View.GONE);
                             btnLogin.setEnabled(true);
-                            tvError.setText("Connection failed: " + t.getMessage());
-                            tvError.setVisibility(View.VISIBLE);
+                            showError("Connection failed: " + t.getMessage());
                         });
                     }
                 });
+    }
+
+    /**
+     * Get the current FCM token from Firebase, register it with the backend,
+     * then navigate to MainActivity. Falls through to MainActivity even if FCM fails.
+     */
+    private void registerFcmThenGo() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        FCMNotificationService.registerToken(this, task.getResult());
+                    }
+                    go(); // always navigate regardless of FCM outcome
+                });
+    }
+
+    private void go() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    private void showError(String msg) {
+        tvError.setText(msg);
+        tvError.setVisibility(View.VISIBLE);
     }
 }

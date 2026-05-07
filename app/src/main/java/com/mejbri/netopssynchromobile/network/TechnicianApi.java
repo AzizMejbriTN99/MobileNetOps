@@ -29,9 +29,7 @@ public interface TechnicianApi {
 
     @Multipart
     @POST("api/technician/demandes/{id}/photos")
-    Call<Map<String, Object>> uploadPhoto(
-            @Path("id") long id,
-            @Part MultipartBody.Part photo);
+    Call<Map<String, Object>> uploadPhoto(@Path("id") long id, @Part MultipartBody.Part photo);
 
     @GET("api/technician/demandes/{id}/photos")
     Call<List<PhotoInfo>> getPhotos(@Path("id") long id);
@@ -47,4 +45,16 @@ public interface TechnicianApi {
 
     @DELETE("api/technician/resources/{id}")
     Call<Map<String, String>> deleteResource(@Path("id") long id);
+
+    @GET("api/technician/profile")
+    Call<Map<String, String>> getProfile();
+
+    @PUT("api/technician/profile")
+    Call<Map<String, String>> updateProfile(@Body Map<String, String> body);
+
+    @PUT("api/technician/profile/password")
+    Call<Map<String, String>> changePassword(@Body Map<String, String> body);
+
+    @POST("api/technician/fcm-token")
+    Call<Map<String, String>> registerFcmToken(@Body Map<String, String> body);
 }
