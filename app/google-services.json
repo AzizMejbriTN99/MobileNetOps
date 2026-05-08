@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "782321613734",
+    "project_id": "netopssynchro",
+    "storage_bucket": "netopssynchro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782321613734:android:edda6e2991c81d9101ad67",
+        "android_client_info": {
+          "package_name": "com.mejbri.netopssynchromobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8d8QMW0GG9qHc2qj8lWGNPaID3gL9rI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

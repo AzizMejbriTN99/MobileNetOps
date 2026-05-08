@@ -18,10 +18,10 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText    etUsername, etPassword;
-    private Button      btnLogin;
+    private EditText etUsername, etPassword;
+    private Button btnLogin;
     private ProgressBar progress;
-    private TextView    tvError;
+    private TextView tvError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             showError("Please fill in all fields.");
             return;
         }
+
         btnLogin.setEnabled(false);
         progress.setVisibility(View.VISIBLE);
         tvError.setVisibility(View.GONE);
@@ -88,17 +89,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Get the current FCM token from Firebase, register it with the backend,
-     * then navigate to MainActivity. Falls through to MainActivity even if FCM fails.
-     */
     private void registerFcmThenGo() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         FCMNotificationService.registerToken(this, task.getResult());
                     }
-                    go(); // always navigate regardless of FCM outcome
+                    go();
                 });
     }
 
@@ -111,4 +108,5 @@ public class LoginActivity extends AppCompatActivity {
         tvError.setText(msg);
         tvError.setVisibility(View.VISIBLE);
     }
+
 }
