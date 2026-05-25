@@ -87,8 +87,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
-    // ── Camera permission ────────────────────────────────────────────────────
-
     private void requestCameraAndTakePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -113,8 +111,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
             }
         }
     }
-
-    // ── Data loading ─────────────────────────────────────────────────────────
 
     private void loadDemande() {
         ApiClient.create(TechnicianApi.class).getDemande(demandeId)
@@ -141,7 +137,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
         btnNavigate.setVisibility(
                 demande.latitude != null && demande.longitude != null ? View.VISIBLE : View.GONE);
 
-        // Lock all action buttons for closed tasks
         boolean isClosed = "CLOSED".equals(demande.status);
         btnStatus.setEnabled(!isClosed);
         btnAction.setEnabled(!isClosed);
@@ -168,8 +163,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
                     @Override public void onFailure(Call<List<DemandeAction>> call, Throwable t) {}
                 });
     }
-
-    // ── Dialogs ───────────────────────────────────────────────────────────────
 
     private void showStatusDialog() {
         String[] statuses = {"IN_PROGRESS", "RESOLVED", "CLOSED"};
@@ -243,7 +236,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
                 });
     }
 
-    // ── Photo ─────────────────────────────────────────────────────────────────
 
     private void takePhoto() {
         File photoFile = new File(getCacheDir() + "/photos",
@@ -286,8 +278,6 @@ public class DemandeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Error reading photo", Toast.LENGTH_SHORT).show();
         }
     }
-
-    // ── Navigation ────────────────────────────────────────────────────────────
 
     private void openNavigation() {
         if (demande == null || demande.latitude == null) return;
