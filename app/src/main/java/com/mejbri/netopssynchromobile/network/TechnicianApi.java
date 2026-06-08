@@ -67,7 +67,9 @@ public interface TechnicianApi {
     @DELETE("api/profile/avatar")
     Call<ProfileResponse> deleteAvatar();
 
-
+    // FCM token registration
+    @POST("api/technician/fcm-token")
+    Call<Map<String, String>> registerFcmToken(@Body Map<String, String> body);
 
     // Notifications
     @GET("api/notifications")

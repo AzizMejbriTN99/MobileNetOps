@@ -21,6 +21,8 @@ import com.mejbri.netopssynchromobile.service.*;
 import com.mejbri.netopssynchromobile.ui.DemandeDetailActivity;
 import com.mejbri.netopssynchromobile.ui.DemandesAdapter;
 import com.mejbri.netopssynchromobile.ui.LoginActivity;
+import com.mejbri.netopssynchromobile.ui.NotificationsActivity;
+import com.mejbri.netopssynchromobile.ui.ProfileActivity;
 import com.mejbri.netopssynchromobile.ui.ResourcesActivity;
 import com.mejbri.netopssynchromobile.util.SessionManager;
 import retrofit2.Call;
@@ -77,10 +79,8 @@ public class MainActivity extends AppCompatActivity {
         tvNotifBadge = findViewById(R.id.tvNotifBadge);
 
 
-        tvDisplayName.setText(SessionManager.getDisplayName(this));
+        tvDisplayName.setText("Welcome, " + SessionManager.getDisplayName(this));
         tvAvatarInitials.setText(SessionManager.getInitials(this));
-
-        tvDisplayName.setText("Welcome, " + SessionManager.getUsername(this));
 
         historyAdapter = new DemandesAdapter(demande -> openDetail(demande.id));
         rvHistory.setLayoutManager(new LinearLayoutManager(this));
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadDemandes();
+        loadNotificationCount();
     }
 
     // ── Data ──────────────────────────────────────────────────────────────────
@@ -193,13 +194,13 @@ public class MainActivity extends AppCompatActivity {
                 .getUnreadCount()
                 .enqueue(new Callback<>() {
                     @Override
-                    public void onResponse(Call<Map<String, Integer>> call,
-                                           Response<Map<String, Integer>> response) {
+                    public void onResponse(Call<Map<String, Long>> call,
+                                           Response<Map<String, Long>> response) {
 
                         if (!response.isSuccessful() || response.body() == null)
                             return;
 
-                        Integer count = response.body().get("count");
+                        Long count = response.body().get("count");
 
                         runOnUiThread(() -> {
                             if (count != null && count > 0) {
@@ -212,8 +213,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Map<String, Integer>> call,
-                                          Throwable t) {
+                    public void onFailure(Call<Map<String, Long>> call, Throwable t) {
                     }
                 });
     }

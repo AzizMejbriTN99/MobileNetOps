@@ -1,37 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/background"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/background">
 
+    <!-- ── Dark navy topbar ── -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp"
+        android:paddingEnd="16dp"
         android:background="@drawable/topbar_bg"
-        android:gravity="center_vertical">
+        android:elevation="4dp">
 
         <ImageButton
             android:id="@+id/btnBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_media_previous"
-            android:layout_width="48dp"
-            android:layout_height="48dp"/>
+            android:src="@drawable/ic_back"
+            android:tint="@color/icon_on_dark"
+            android:contentDescription="Back" />
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
             android:text="Notifications"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
+            android:textColor="@color/text_on_dark"
             android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Mark all read button -->
+        <TextView
+            android:id="@+id/btnMarkAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Mark all read"
+            android:textSize="12sp"
+            android:textColor="@color/icon_on_dark"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true" />
     </LinearLayout>
+
+    <!-- Section label -->
+    <TextView
+        android:text="RECENT"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_secondary"
+        android:letterSpacing="0.14"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Empty state -->
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No notifications yet"
+        android:textSize="14sp"
+        android:textColor="@color/text_hint"
+        android:gravity="center"
+        android:paddingTop="48dp"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotifications"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false" />
 
 </LinearLayout>

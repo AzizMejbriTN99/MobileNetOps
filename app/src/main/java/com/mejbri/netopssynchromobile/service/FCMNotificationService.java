@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -63,12 +62,10 @@ public class FCMNotificationService extends FirebaseMessagingService {
         NotificationManager manager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel ch = new NotificationChannel(
-                    CHANNEL_ID, "NetOps Tasks", NotificationManager.IMPORTANCE_HIGH);
-            ch.setDescription("Task assignments and updates");
-            manager.createNotificationChannel(ch);
-        }
+        NotificationChannel ch = new NotificationChannel(
+                CHANNEL_ID, "NetOps Tasks", NotificationManager.IMPORTANCE_HIGH);
+        ch.setDescription("Task assignments and updates");
+        manager.createNotificationChannel(ch); // no-op if already exists
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

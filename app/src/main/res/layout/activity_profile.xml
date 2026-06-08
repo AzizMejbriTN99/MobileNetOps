@@ -1,205 +1,364 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:background="@color/background">
 
+    <!-- ── Dark navy topbar (matches MainActivity) ── -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/topbar_bg"
+        android:elevation="4dp">
 
-        <!-- TOP BAR -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:tint="@color/icon_on_dark"
+            android:contentDescription="Back" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/topbar_bg"
-            android:paddingHorizontal="12dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="My Profile"
+            android:textColor="@color/text_on_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_media_previous"
-                android:tint="@color/text_on_dark"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:visibility="gone" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textColor="@color/text_on_dark"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="12dp"/>
-        </LinearLayout>
-
-        <!-- CONTENT -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingBottom="32dp">
 
-            <ImageView
-                android:id="@+id/ivAvatar"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_profile"
-                android:scaleType="centerCrop"
-                android:background="@drawable/avatar_bg"/>
-
-            <Button
-                android:id="@+id/btnDeleteAvatar"
-                android:layout_width="wrap_content"
+            <!-- ── Avatar card ── -->
+            <androidx.cardview.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Remove Photo"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="18dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="28dp"
+                    android:paddingBottom="20dp">
+
+                    <!-- Avatar image (circle, clickable) -->
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:src="@drawable/ic_profile"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/avatar_bg"
+                        android:contentDescription="Profile photo" />
+
+                    <!-- Username -->
+                    <TextView
+                        android:id="@+id/tvUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:text="Tap photo to change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_hint" />
+
+                    <Button
+                        android:id="@+id/btnDeleteAvatar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="12dp"
+                        android:text="Remove Photo"
+                        android:textSize="12sp"
+                        android:textColor="@color/danger"
+                        android:background="@drawable/btn_secondary"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── Personal info card ── -->
             <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text="PERSONAL INFO"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/text_primary"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"/>
-
-            <View
+                android:textColor="@color/text_secondary"
+                android:letterSpacing="0.14"
+                android:paddingStart="20dp"
+                android:paddingTop="22dp"
+                android:paddingBottom="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/border"/>
+                android:layout_height="wrap_content" />
 
-            <!-- FIRSTNAME -->
+            <androidx.cardview.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginEnd="8dp">
+
+                            <TextView
+                                android:text="First Name"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_secondary"
+                                android:letterSpacing="0.04"
+                                android:layout_marginBottom="4dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <EditText
+                                android:id="@+id/etFirstname"
+                                android:layout_width="match_parent"
+                                android:layout_height="46dp"
+                                android:background="@drawable/input_bg"
+                                android:padding="12dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:hint="John"
+                                android:textColorHint="@color/text_hint"
+                                android:inputType="textPersonName"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:text="Last Name"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_secondary"
+                                android:letterSpacing="0.04"
+                                android:layout_marginBottom="4dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <EditText
+                                android:id="@+id/etLastname"
+                                android:layout_width="match_parent"
+                                android:layout_height="46dp"
+                                android:background="@drawable/input_bg"
+                                android:padding="12dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:hint="Doe"
+                                android:textColorHint="@color/text_hint"
+                                android:inputType="textPersonName"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/border"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="14dp" />
+
+                    <TextView
+                        android:text="Email"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_secondary"
+                        android:letterSpacing="0.04"
+                        android:layout_marginBottom="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:hint="email@example.com"
+                        android:textColorHint="@color/text_hint"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+
+                    <TextView
+                        android:text="Phone"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_secondary"
+                        android:letterSpacing="0.04"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/etPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:hint="+216 XX XXX XXX"
+                        android:textColorHint="@color/text_hint"
+                        android:inputType="phone"
+                        android:singleLine="true" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── Change password card ── -->
             <TextView
-                android:text="First Name"
+                android:text="CHANGE PASSWORD"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/text_secondary"
+                android:letterSpacing="0.14"
+                android:paddingStart="20dp"
+                android:paddingTop="22dp"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/etFirstname"
+            <androidx.cardview.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface">
 
-            <!-- LASTNAME -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
 
-            <TextView
-                android:text="Last Name"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="Current Password"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_secondary"
+                        android:letterSpacing="0.04"
+                        android:layout_marginBottom="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/etLastname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
+                    <EditText
+                        android:id="@+id/etCurrentPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:hint="Required to change password"
+                        android:textColorHint="@color/text_hint"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
 
-            <!-- EMAIL -->
+                    <TextView
+                        android:text="New Password"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_secondary"
+                        android:letterSpacing="0.04"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-            <TextView
-                android:text="Email"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                    <EditText
+                        android:id="@+id/etNewPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:hint="Min. 8 characters"
+                        android:textColorHint="@color/text_hint"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:inputType="textEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
-
-            <!-- PHONE -->
-
-            <TextView
-                android:text="Phone"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/etPhone"
-                android:inputType="phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/border"/>
-
-            <!-- PASSWORD -->
-
-            <TextView
-                android:text="Current Password"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/etCurrentPassword"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
-
-            <TextView
-                android:text="New Password"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <EditText
-                android:id="@+id/etNewPassword"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_bg"
-                android:padding="12dp"/>
-
+            <!-- ── Save button ── -->
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="24dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginTop="20dp"
                 android:text="Save Changes"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:background="@drawable/btn_primary"/>
-
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:layout_marginTop="16dp"/>
+                android:background="@drawable/btn_primary" />
 
         </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

@@ -11,6 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
+    // 10.0.2.2 = Android emulator loopback to host machine's localhost.
+    // For a physical device, replace with your machine's LAN IP, e.g. "http://192.168.1.X:5600/"
     private static final String BASE_URL = "http://localhost:5600/";
     private static Retrofit retrofit;
     private static Context appContext;

@@ -254,7 +254,7 @@ public class DemandeDetailActivity extends AppCompatActivity {
             byte[] bytes = getContentResolver().openInputStream(uri).readAllBytes();
             RequestBody reqBody = RequestBody.create(bytes, MediaType.parse("image/jpeg"));
             MultipartBody.Part part = MultipartBody.Part
-                    .createFormData("photo", "photo.jpg", reqBody);
+                    .createFormData("file", "photo.jpg", reqBody);
 
             ApiClient.create(TechnicianApi.class)
                     .uploadPhoto(demandeId, part)
