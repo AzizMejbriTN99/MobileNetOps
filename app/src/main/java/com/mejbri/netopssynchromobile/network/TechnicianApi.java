@@ -46,15 +46,42 @@ public interface TechnicianApi {
     @DELETE("api/technician/resources/{id}")
     Call<Map<String, String>> deleteResource(@Path("id") long id);
 
-    @GET("api/technician/profile")
-    Call<Map<String, String>> getProfile();
+    // Profile
+    @GET("api/profile")
+    Call<ProfileResponse> getProfile();
 
-    @PUT("api/technician/profile")
-    Call<Map<String, String>> updateProfile(@Body Map<String, String> body);
+    @PUT("api/profile")
+    Call<ProfileResponse> updateProfile(
+            @Body ProfileUpdateRequest body
+    );
 
-    @PUT("api/technician/profile/password")
-    Call<Map<String, String>> changePassword(@Body Map<String, String> body);
+    @Multipart
+    @POST("api/profile/avatar")
+    Call<ProfileResponse> uploadAvatar(
+            @Part MultipartBody.Part file
+    );
 
-    @POST("api/technician/fcm-token")
-    Call<Map<String, String>> registerFcmToken(@Body Map<String, String> body);
+    @GET("api/profile/avatar")
+    Call<okhttp3.ResponseBody> getAvatar();
+
+    @DELETE("api/profile/avatar")
+    Call<ProfileResponse> deleteAvatar();
+
+
+
+    // Notifications
+    @GET("api/notifications")
+    Call<List<Notification>> getNotifications();
+
+    @GET("api/notifications/unread-count")
+    Call<Map<String, Long>> getUnreadCount();
+
+    @PATCH("api/notifications/mark-all-read")
+    Call<Map<String,String>> markAllRead();
+
+    @PATCH("api/notifications/{id}/read")
+    Call<Map<String,String>> markOneRead(
+            @Path("id") long id
+    );
 }
+

@@ -36,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
     // Active task views
     private View cardActiveTask;
     private View layoutNoActive;
-    private TextView tvWelcome, tvActiveTitle, tvActivePriority, tvActiveStatus,
+    private TextView tvDisplayName, tvActiveTitle, tvActivePriority, tvActiveStatus,
                      tvActiveClient, tvActiveLocation;
     private Button btnOpenActive;
+    private TextView tvAvatarInitials;
+    private TextView tvNotifBadge;
 
     // History views
     private RecyclerView rvHistory;
@@ -51,12 +53,13 @@ public class MainActivity extends AppCompatActivity {
     private List<Demande> allHistory = new ArrayList<>(); // RESOLVED + CLOSED
     private String activeTab = "RESOLVED"; // RESOLVED | CLOSED
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvWelcome       = findViewById(R.id.tvWelcome);
+        tvDisplayName = findViewById(R.id.tvDisplayName);
         cardActiveTask  = findViewById(R.id.cardActiveTask);
         layoutNoActive  = findViewById(R.id.layoutNoActive);
         tvActiveTitle   = findViewById(R.id.tvActiveTitle);
@@ -70,12 +73,30 @@ public class MainActivity extends AppCompatActivity {
         tabResolved     = findViewById(R.id.tabResolved);
         tabClosed       = findViewById(R.id.tabClosed);
         etSearch        = findViewById(R.id.etSearch);
+        tvAvatarInitials = findViewById(R.id.tvAvatarInitials);
+        tvNotifBadge = findViewById(R.id.tvNotifBadge);
 
-        tvWelcome.setText("Welcome, " + SessionManager.getUsername(this));
+
+        tvDisplayName.setText(SessionManager.getDisplayName(this));
+        tvAvatarInitials.setText(SessionManager.getInitials(this));
+
+        tvDisplayName.setText("Welcome, " + SessionManager.getUsername(this));
 
         historyAdapter = new DemandesAdapter(demande -> openDetail(demande.id));
         rvHistory.setLayoutManager(new LinearLayoutManager(this));
         rvHistory.setAdapter(historyAdapter);
+
+        findViewById(R.id.btnProfile)
+                .setOnClickListener(v ->
+                        startActivity(
+                                new Intent(this, ProfileActivity.class)
+                        ));
+
+        findViewById(R.id.btnNotifications)
+                .setOnClickListener(v ->
+                        startActivity(
+                                new Intent(this, NotificationsActivity.class)
+                        ));
 
         btnOpenActive.setOnClickListener(v -> {
             if (activeTask != null) openDetail(activeTask.id);
@@ -165,6 +186,36 @@ public class MainActivity extends AppCompatActivity {
             cardActiveTask.setVisibility(View.GONE);
             layoutNoActive.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void loadNotificationCount() {
+        ApiClient.create(TechnicianApi.class)
+                .getUnreadCount()
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Map<String, Integer>> call,
+                                           Response<Map<String, Integer>> response) {
+
+                        if (!response.isSuccessful() || response.body() == null)
+                            return;
+
+                        Integer count = response.body().get("count");
+
+                        runOnUiThread(() -> {
+                            if (count != null && count > 0) {
+                                tvNotifBadge.setVisibility(View.VISIBLE);
+                                tvNotifBadge.setText(String.valueOf(count));
+                            } else {
+                                tvNotifBadge.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<Map<String, Integer>> call,
+                                          Throwable t) {
+                    }
+                });
     }
 
     // ── History ───────────────────────────────────────────────────────────────
