@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private Demande activeTask;
     private List<Demande> allHistory = new ArrayList<>(); // RESOLVED + CLOSED
     private String activeTab = "RESOLVED"; // RESOLVED | CLOSED
+
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable refreshTask;
 
 
     @Override
@@ -113,6 +118,17 @@ public class MainActivity extends AppCompatActivity {
             }
             public void afterTextChanged(Editable s) {}
         });
+
+        refreshTask = new Runnable() {
+            @Override
+            public void run() {
+                loadDemandes();
+                loadNotificationCount();
+                handler.postDelayed(this, 10000); // every 10 seconds
+            }
+        };
+
+        handler.post(refreshTask);
 
         findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
         findViewById(R.id.btnResources).setOnClickListener(v ->

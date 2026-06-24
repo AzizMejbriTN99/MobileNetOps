@@ -279,7 +279,7 @@ public class ProfileActivity extends AppCompatActivity {
             RequestBody requestBody =
                     RequestBody.create(
                             bytes,
-                            okhttp3.MediaType.parse("image/*"));
+                            okhttp3.MediaType.parse("image/jpeg"));
 
             MultipartBody.Part file =
                     MultipartBody.Part.createFormData(
